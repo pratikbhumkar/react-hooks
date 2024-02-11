@@ -1,5 +1,5 @@
 import './App.css';
-import { useSyncExternalStore, useMemo, useEffect, useState, useDeferredValue, useLayoutEffect } from 'react';
+import { useSyncExternalStore, useMemo, useEffect, useState, useDeferredValue, useLayoutEffect, useRef } from 'react';
 import { todosStore } from './todoStore.js';
 import ListItem from './listItem.js';
 
@@ -8,11 +8,15 @@ const displayValue = (input) => {
 }
   function App() {  
   const [inp, setInp] = useState('');
+  const inputRef = useRef();
   const defferedInp = useDeferredValue(inp)
   let data = 4;
   const onChange = (event)=>{
     setInp(event.target.value)
   }
+  useEffect(()=>{
+    inputRef.current?.focus()
+  },[])
   useEffect(()=> {
     console.log('Running useEffect')
     // Type faster to see magic
@@ -30,7 +34,7 @@ const displayValue = (input) => {
   return (
     <div className="App">
       <header className="App-header">
-        <input value={inp} onChange={onChange}/>
+        <input ref={inputRef} value={inp} onChange={onChange}/>
         { <button onClick={() => todosStore.addTodo()}>Add todo</button> }
         <hr />
         <ul>
