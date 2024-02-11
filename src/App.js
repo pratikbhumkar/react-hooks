@@ -1,27 +1,32 @@
 import './App.css';
-import { useSyncExternalStore, useMemo, useCallback, useEffect, useState, useDeferredValue } from 'react';
+import { useSyncExternalStore, useMemo, useEffect, useState, useDeferredValue, useLayoutEffect } from 'react';
 import { todosStore } from './todoStore.js';
 import ListItem from './listItem.js';
 
 const displayValue = (input) => {
   console.log('Rendering/Reloading displayValue', input)
 }
-function App() {
+  function App() {  
   const [inp, setInp] = useState('');
   const defferedInp = useDeferredValue(inp)
   let data = 4;
-  const arr = [];
   const onChange = (event)=>{
     setInp(event.target.value)
   }
   useEffect(()=> {
+    console.log('Running useEffect')
     // Type faster to see magic
     console.log('inp, defferedInp', inp, defferedInp)
   }, [inp, defferedInp])
+
+  useLayoutEffect(() => {
+    console.log('Running useLayoutEffect')
+  }, []);
+
   useMemo(() => displayValue(data), [data])
   const todos = useSyncExternalStore(todosStore.subscribe,
     todosStore.getSnapshot);
- 
+    
   return (
     <div className="App">
       <header className="App-header">
